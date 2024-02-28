@@ -1,0 +1,6 @@
+- name: Ping
+  hosts: azure
+  tasks:
+  - name: Ping server
+    ansible.builtin.ping:
+
