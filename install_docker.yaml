@@ -7,16 +7,19 @@
         pkg:
           - ca-certificates
           - curl
+
     - name: Add key to keyring
       ansible.builtin.command:
         cmd: install -m 0755 -d /etc/apt/keyrings
       register: create_keyring_folder
       changed_when: create_keyring_folder.rc != 0
+
     - name: Curl repo link
       ansible.builtin.get_url:
         url: https://download.docker.com/linux/debian/gpg
         dest: /etc/apt/keyrings/docker.asc
-        mode: 'a+r'
+        mode: "a+r"
+
     - name: Add the repository to Apt sources
       ansible.builtin.shell: |
         set -o pipefail
@@ -24,6 +27,7 @@
         "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
         $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
         sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
     - name: Install the Docker packages
       ansible.builtin.apt:
         update_cache: true
